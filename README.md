@@ -46,10 +46,8 @@ This system is designed using a **cloud-native architecture** powered by **AWS s
    - Data is displayed using an interactive graph.
 
 ### **Proposed Architecture Diagram**
-```plaintext
-[ESP32 Device] --> [AWS IoT Core] --> [DynamoDB (Real-Time DB)]
-                          \--> [S3 (Cold Storage)] --> [AWS Lambda] --> [React App]
-```
+
+![workflow chart](https://github.com/user-attachments/assets/ab4f6742-c4b0-408b-b2f3-0716f995f325)
 
 ---
 
@@ -141,6 +139,7 @@ This system is designed using a **cloud-native architecture** powered by **AWS s
 **And this is result:**
 
 ![data_measures_project](https://github.com/user-attachments/assets/49ac9ec9-20cc-43c6-ae32-1bddb55e7958)
+Blue line represents data from device and red line is data from SHMI.
 
 ## **Decisions and Trade-offs**
 
