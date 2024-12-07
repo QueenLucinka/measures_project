@@ -1,118 +1,157 @@
-# measures_project
-A complete IoT temperature and humidity monitoring system using ESP32, AWS services (IoT Core, Lambda, S3, DynamoDB), and a React app for data visualization.
+# **Measures: IoT Temperature and Humidity Monitoring System**
 
-Measures: IoT Temperature and Humidity Monitoring System
-This project demonstrates an end-to-end IoT system that collects temperature and humidity data using an ESP32 device, stores the data in AWS services, and visualizes it in a React application. The system integrates real-time and batch data handling to offer flexibility in monitoring and analyzing temperature trends.
+An end-to-end IoT solution for temperature and humidity monitoring using **ESP32**, **AWS services** (IoT Core, Lambda, S3, DynamoDB), and a **React app** for data visualization.
 
-Features
-ESP32 Data Collection:
-Sends simulated temperature and humidity data to AWS IoT Core.
-Data is stored in DynamoDB for real-time access.
-Data is also archived in an S3 bucket for long-term storage and analysis.
+---
 
+## **Features**
 
-Dual Database Approach:
-DynamoDB acts as a real-time database for quick access to the latest data.
-S3 bucket serves as a cold storage database, ideal for batch processing, long-term data retention, and app integration.
+### **1. ESP32 Data Collection**
+- Simulates temperature and humidity data and sends it to **AWS IoT Core**.
+- Real-time data is stored in **DynamoDB**.
+- Archived data is stored in an **S3 bucket** for long-term analysis.
 
-Lambda Functions:
-Fetch IoT device data from the S3 bucket.
-Retrieve weather data from the Swedish Meteorological and Hydrological Institute (SHMI).
-Calculate and compare differences between IoT and SHMI temperature data.
-Provide combined data to the React app for visualization.
+### **2. Dual Database Design**
+- **DynamoDB**: For low-latency, real-time data retrieval.
+- **S3**: For scalable and cost-effective long-term storage.
 
-React Application:
-Displays an interactive graph of IoT and SHMI temperature data over time.
-Uses Chart.js to visualize temperature trends with real-time updates.
-Architecture Overview
+### **3. AWS Lambda Functions**
+Lambda functions are stored in the `AWS_lambda_functions/` directory and handle key operations:
+- **`read-from-monitor-bucket.mjs`**: Fetches IoT data from **S3** and formats it for visualization.
+- **`SHMIdata.mjs`**: Retrieves weather data from the **Swedish Meteorological and Hydrological Institute (SHMI)** API.
+- **`CompareTempIoTShmi.mjs`**: Compares IoT and SHMI data for temperature analysis.
+- **`GraphIOTandSHMI.mjs`**: Sends combined IoT and SHMI data to the React app for graphing.
 
-This project follows a cloud-native architecture leveraging AWS services:
+### **4. React Application**
+- Interactive graphs for IoT and SHMI temperature data visualization.
+- Real-time updates using **Chart.js** for dynamic data trends.
 
-IoT Data Collection:
-ESP32 sends temperature and humidity data to AWS IoT Core.
-Data is routed to DynamoDB for real-time access and S3 bucket for batch processing.
+---
 
-Cold Database (S3 Bucket):
-Data in the S3 bucket is processed via AWS Lambda functions.
-This ensures the React app can fetch historical data seamlessly, even when the ESP32 is offline.
+## **Architecture Overview**
 
-React App:
-Fetches data from the S3 bucket via Lambda functions.
-Displays a graph comparing IoT and SHMI temperature data.
+This system is designed using a **cloud-native architecture** powered by **AWS services**:
 
-Workflow
+1. **Data Collection**:
+   - **ESP32** sends simulated temperature and humidity data to **AWS IoT Core**.
+   - Data is routed to:
+     - **DynamoDB** for real-time access.
+     - **S3 bucket** for long-term storage and batch analysis.
 
-Data Collection:
-ESP32 device generates temperature and humidity data and sends it to AWS IoT Core.
-Data is stored in DynamoDB and S3 bucket for different use cases:
-DynamoDB: Real-time monitoring and live updates.
-S3 bucket: Long-term data storage for app visualization.
+2. **Data Processing**:
+   - **AWS Lambda functions** process IoT and SHMI data, compute differences, and prepare data for visualization.
 
-AWS Lambda Functions:
-Function 1: Fetch IoT data from S3 bucket.
-Function 2: Fetch SHMI weather data.
-Function 3: Combine IoT and SHMI data to calculate differences.
-Function 4: Provide processed data to the React app.
+3. **Visualization**:
+   - The **React app** fetches processed data from **Lambda functions**.
+   - Data is displayed using an interactive graph.
 
-React App:
-Calls the Lambda function to fetch processed IoT and SHMI data.
-Renders a graph using Chart.js to visualize temperature trends.
+### **Proposed Architecture Diagram**
+```plaintext
+[ESP32 Device] --> [AWS IoT Core] --> [DynamoDB (Real-Time DB)]
+                          \--> [S3 (Cold Storage)] --> [AWS Lambda] --> [React App]
+```
 
-How to Use
+---
 
-Clone the Repository:
-git clone https://github.com/your-username/measures_project.git
-cd measures
+## **Workflow**
 
-Update Secrets:
-Replace secrets.h with your own credentials for ESP32 (except WiFi credentials, which are omitted for security).
-Add your AWS IoT Core endpoint and credentials.
+1. **Data Collection**:
+   - ESP32 device sends temperature and humidity data to AWS IoT Core.
+   - Data is stored in both DynamoDB (real-time) and S3 (long-term).
 
-Deploy AWS Infrastructure:
-Set up an S3 bucket named monitor-temp-bucket.
-Create a DynamoDB table to store real-time IoT data.
-Deploy the provided Lambda functions with appropriate roles and permissions:
-AmazonS3ReadOnlyAccess
-AWSIoTFullAccess
-AmazonDynamoDBFullAccess
+2. **Data Processing via Lambda Functions**:
+   - Fetch data from S3 and DynamoDB.
+   - Retrieve SHMI weather data.
+   - Compare IoT and SHMI temperature data.
+   - Provide combined data for visualization.
 
-Run the React App
-Install dependencies:
-npm install
+3. **Data Visualization**:
+   - React app fetches processed data via Lambda.
+   - Graphs display temperature trends over time.
 
-Start the app:
-npm start
+---
 
-Open your browser at http://localhost:3000 to view the temperature dashboard. 
+## **Hardware Requirements**
+- **ESP32 development board**: Microcontroller for IoT applications.
+- **Micro-USB cable**: For power and programming.
+- **Optional: DHT22 sensor** for real-world environmental data collection.
 
-Decisions and Trade-offs
+---
 
-DynamoDB for Real-time Updates:
-Chosen for its low-latency performance and suitability for frequently changing IoT data.
-Ideal for real-time monitoring and alerts.
+## **Software Requirements**
 
-S3 as a Cold Database:
-S3 was chosen for its scalability and cost-effectiveness for long-term storage.
-Enables efficient batch processing and historical trend analysis.
+1. **PlatformIO**: For ESP32 firmware development.  
+   [Download PlatformIO](https://platformio.org/)
 
-Using Lambda Functions:
-Simplifies integration with S3 and DynamoDB.
-Reduces the need for additional backend infrastructure.
+2. **Node.js**: For React app and dependency management.  
+   [Download Node.js](https://nodejs.org/)
 
-Graph Visualization:
-The React app uses Chart.js for an interactive and user-friendly data visualization experience.
+3. **AWS CLI** (optional): For managing AWS resources.  
+   [Download AWS CLI](https://aws.amazon.com/cli/)
 
-Future Improvements
+---
 
-Add authentication for secure access to the React app.
-Implement notifications for temperature anomalies using AWS SNS.
-Expand data sources to include additional environmental metrics (e.g., pressure, wind speed).
-Optimize data fetching for larger datasets using pagination.
+## **Setup Instructions**
 
-Acknowledgments
+### **Step 1: Set Up ESP32**
+1. Install **PlatformIO** on your IDE (e.g., Visual Studio Code).
+2. Include necessary libraries (e.g., `WiFi.h`, `PubSubClient.h`).
+3. Configure your `secrets.h` file with:
+   - Wi-Fi credentials.
+   - AWS IoT Core endpoint and credentials.
 
-Swedish Meteorological and Hydrological Institute (SHMI) for weather data.
-AWS for providing IoT, S3, DynamoDB, and Lambda services.
+### **Step 2: Set Up AWS Services**
+1. **S3 Bucket**:
+   - Create a bucket named `monitor-temp-bucket`.
+2. **DynamoDB Table**:
+   - Create a table for real-time IoT data.
+3. **Lambda Functions**:
+   - Deploy provided Lambda functions with appropriate IAM roles:
+     - `AmazonS3ReadOnlyAccess`
+     - `AWSIoTFullAccess`
+     - `AmazonDynamoDBFullAccess`.
 
+### **Step 3: Run the React App**
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/your-username/measures_project.git
+   cd measures_project
+   ```
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Start the app:
+   ```bash
+   npm start
+   ```
+4. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
+---
 
+## **Decisions and Trade-offs**
+
+- **DynamoDB**: Chosen for its low-latency performance, enabling real-time updates.
+- **S3**: Offers cost-effective, scalable storage for long-term data.
+- **Lambda Functions**: Simplify backend infrastructure and enable integration with AWS services.
+
+---
+
+## **Future Improvements**
+
+1. **Notifications**:
+   - Add alerts for temperature anomalies using **AWS SNS**.
+2. **Data Expansion**:
+   - Incorporate additional environmental metrics like pressure or wind speed.
+3. **Data Optimization**:
+   - Implement pagination for handling larger datasets.
+
+---
+
+## **Acknowledgments**
+- **Swedish Meteorological and Hydrological Institute (SHMI)** for weather data.
+- **AWS** for IoT, S3, DynamoDB, and Lambda services.
+
+---
+
+This version has improved readability and structure, along with a streamlined setup process and placeholder architecture diagram for better visualization.
