@@ -1,0 +1,2 @@
+These lambda functions are written in AWS lambda and are not called from here. 
+They are here just for to see the logic of each function 
