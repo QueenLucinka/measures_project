@@ -15,7 +15,7 @@ An end-to-end IoT solution for temperature and humidity monitoring using **ESP32
 - **DynamoDB**: For low-latency, real-time data retrieval.
 - **S3**: For scalable and cost-effective long-term storage.
 
-### **3. AWS Lambda Functions**
+### **3. AWS Lambda Functions** 
 Lambda functions are stored in the `AWS_lambda_functions/` directory and handle key operations:
 - **`read-from-monitor-bucket.mjs`**: Fetches IoT data from **S3** and formats it for visualization.
 - **`SHMIdata.mjs`**: Retrieves weather data from the **Swedish Meteorological and Hydrological Institute (SHMI)** API.
@@ -75,6 +75,9 @@ This system is designed using a **cloud-native architecture** powered by **AWS s
 - **ESP32 development board**: Microcontroller for IoT applications.
 - **Micro-USB cable**: For power and programming.
 - **Optional: DHT22 sensor** for real-world environmental data collection.
+![esp32](https://github.com/user-attachments/assets/fd47edcd-b4f3-4d76-b8af-45e90d519fab)
+![microcable](https://github.com/user-attachments/assets/a3b7b400-f317-48bc-9734-3e412f4d3249)
+
 
 ---
 
@@ -128,6 +131,16 @@ This system is designed using a **cloud-native architecture** powered by **AWS s
 4. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ---
+**First comes login page:**
+
+![login_measures_project](https://github.com/user-attachments/assets/9545719f-fd9d-4f3a-b6d4-1ea2344309e4)
+
+**Then depends on the amount of data just wait until it loads**
+![waiting_for_data_to_load](https://github.com/user-attachments/assets/2f7543eb-c6a6-4433-857a-e73eb72e2816)
+
+**And this is result:**
+
+![data_measures_project](https://github.com/user-attachments/assets/49ac9ec9-20cc-43c6-ae32-1bddb55e7958)
 
 ## **Decisions and Trade-offs**
 
